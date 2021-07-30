@@ -16,6 +16,7 @@ namespace Mach.Controllers
 
         }
 
+        //test controller
         [HttpGet]
         public async Task<ActionResult<List<Contrato>>> Get()
         {
