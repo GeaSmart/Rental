@@ -42,6 +42,13 @@ namespace Mach.Controllers
                     IsTransporte=true,
                     Observaciones="finalmente obs"
                 },
+                new Contrato(){
+                    FechaInicio = new DateTime(),
+                    FechaFin = new DateTime(),
+                    IsCombustible=false,
+                    IsTransporte=true,
+                    Observaciones="un obs desde master"
+                },
             };
         }
 
