@@ -47,7 +47,7 @@ namespace Mach.Controllers
                     FechaFin = new DateTime(),
                     IsCombustible=false,
                     IsTransporte=true,
-                    Observaciones="un obs desde master"
+                    Observaciones="un obs desde la rama master"
                 },
             };
         }
