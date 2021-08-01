@@ -26,6 +26,12 @@ namespace Mach.Controllers
             return await context.Contrato.ToListAsync();
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Contrato>> Get(int id)
+        {
+            return await context.Contrato.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
         [HttpPost]
         public async Task<ActionResult> Post(Contrato contrato)
         {
