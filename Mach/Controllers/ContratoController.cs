@@ -1,5 +1,6 @@
 ﻿using Mach.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,49 +12,56 @@ namespace Mach.Controllers
     [Route("api/[controller]")]
     public class ContratoController:ControllerBase
     {
-        public ContratoController()
-        {
+        private readonly ApplicationDbContext context;
 
+        public ContratoController(ApplicationDbContext context)
+        {
+            this.context = context;
         }
 
         //test controller
         [HttpGet]
         public async Task<ActionResult<List<Contrato>>> Get()
         {
-            return new List<Contrato>() {
-                new Contrato(){ 
-                    FechaInicio = new DateTime(),
-                    FechaFin = new DateTime(),
-                    IsCombustible=false, 
-                    IsTransporte=true, 
-                    Observaciones="ninguna obs"
-                },
-                new Contrato(){
-                    FechaInicio = new DateTime(),
-                    FechaFin = new DateTime(),
-                    IsCombustible=false,
-                    IsTransporte=true,
-                    Observaciones="alguna obs"
-                },
-                new Contrato(){
-                    FechaInicio = new DateTime(),
-                    FechaFin = new DateTime(),
-                    IsCombustible=false,
-                    IsTransporte=true,
-                    Observaciones="finalmente obs"
-                },
-                new Contrato(){
-                    FechaInicio = new DateTime(),
-                    FechaFin = new DateTime(),
-                    IsCombustible=false,
-                    IsTransporte=true,
-                    Observaciones="un obs desde la rama master"
-                },
-            };
+            return await context.Contrato.ToListAsync();
         }
 
-        //development branch
+        [HttpPost]
+        public async Task<ActionResult> Post(Contrato contrato)
+        {
+            context.Contrato.Add(contrato);
+            await context.SaveChangesAsync();
+            return Ok();
+        }
 
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> Put(int id, Contrato contrato)
+        {
+            var existe = await context.Contrato.AnyAsync(x => x.Id == id);
+
+            if (!existe)
+                return NotFound("El contrato no existe");
+
+            if (id != contrato.Id)
+                return BadRequest("el id de la ruta no coincide con el del contrato enviado");
+                        
+            context.Contrato.Update(contrato);
+            await context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var existe = await context.Contrato.AnyAsync(x => x.Id == id);
+
+            if (!existe)
+                return NotFound("El contrato no existe");
+
+            context.Contrato.Remove(new Contrato() { Id = id });
+            await context.SaveChangesAsync();
+            return Ok();
+        }
 
     }
 }
